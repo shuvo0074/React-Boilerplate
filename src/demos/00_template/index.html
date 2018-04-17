@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>React</title>
+    <link rel="stylesheet" type="text/css" href="../../css/main.css">
     <script src="../../js/react.min.js"></script>
     <script src="../../js/react-dom.min.js"></script>
     <script src="../../js/browser.min.js"></script>
@@ -27,16 +28,39 @@
             render: function(){
                 return(
                     <div>
+                    <h1>{this.props.children}</h1>
                     <h2>{this.props.title}<br/></h2>
                     <p>{this.props.desc}<br/></p>
                 </div>
                 )
             }
+        })// "this.props.children" is used to fetch a property from the final render
+        // "this.props.(parameterName)" is used to return a property to the final render.
+        var Comment=React.createClass({
+            edit: function() {
+                alert("editing comment")
+            },
+            remove: function() {
+                alert("deliting comment")
+            },
+            render: function(){
+                return(
+                    <div className="commentContainer">
+                    <div className="commentText">{this.props.children}</div>
+                    <button onClick={this.edit} className="button-primary">edit</button>
+                    <button onClick={this.remove} className="button-danger">remove</button>
+                    </div>
+                )
+            }
         })
-        ReactDOM.render(<div>
+        ReactDOM.render(<div className="board">
             <X/>
             <Y title="comp 1" desc="Random text in Y variable, component 1"/>
+            <Y>"another Y"</Y>
             <i><Y title="comp 2" desc="Random text in Y variable, component 2"/></i>
+            <Comment>"comment1"</Comment>
+            <Comment>"comment2"</Comment>
+            <Comment>"comment3"</Comment>
             </div>
             ,document.getElementById('container')); //render function can return only one component.To return multiple, bind them inside a div or something
     </script>
