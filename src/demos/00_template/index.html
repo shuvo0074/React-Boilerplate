@@ -27,15 +27,16 @@
             render: function(){
                 return(
                     <div>
-                    <h2>Y<br/></h2>
-                    <p> A sample text in variable y <br/> </p>
+                    <h2>{this.props.title}<br/></h2>
+                    <p>{this.props.desc}<br/></p>
                 </div>
                 )
             }
         })
         ReactDOM.render(<div>
             <X/>
-            <Y/>
+            <Y title="comp 1" desc="Random text in Y variable, component 1"/>
+            <i><Y title="comp 2" desc="Random text in Y variable, component 2"/></i>
             </div>
             ,document.getElementById('container')); //render function can return only one component.To return multiple, bind them inside a div or something
     </script>
