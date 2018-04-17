@@ -31,19 +31,28 @@
                     <h1>{this.props.children}</h1>
                     <h2>{this.props.title}<br/></h2>
                     <p>{this.props.desc}<br/></p>
-                </div>
+                    </div>
                 )
             }
         })// "this.props.children" is used to fetch a property from the final render
         // "this.props.(parameterName)" is used to return a property to the final render.
         var Comment=React.createClass({
+            getInitialState: function(){
+                return{editing: false}
+            },
             edit: function() {
-                alert("editing comment")
+                console.log("editing comment");
+                this.setState({editing: true})
             },
             remove: function() {
-                alert("deliting comment")
+                console.log("removing comment" + (this.props.children))
             },
-            render: function(){
+            save: function() {
+                var val=this.refs.newText.value
+                this.setState({editing: false})
+                console.log("editing comment" + val);
+            },
+            renderNormal:function () {
                 return(
                     <div className="commentContainer">
                     <div className="commentText">{this.props.children}</div>
@@ -51,6 +60,45 @@
                     <button onClick={this.remove} className="button-danger">remove</button>
                     </div>
                 )
+            },
+            renderForm:function () {
+                return(
+                    <div className="commentContainer">
+                    <textarea ref="newText" defaultValue={this.props.children}></textarea>
+                    <button onClick={this.save} className="button-success">save</button>
+                    </div>
+                )
+            },
+            render: function(){
+                if (this.state.editing) {
+                    return this.renderForm()
+                }else{
+                    return this.renderNormal()
+                }
+            }
+        })
+        var CheckBox=React.createClass({
+            getInitialState: function () {
+                return {checked: false} //multiple states can be defined here
+            },
+            handleChecked: function(){
+                this.setState({checked: !this.state.checked})
+            },
+            render: function(){
+                var msg
+                if (this.state.checked){
+                    msg=" checked"
+                }
+                else {
+                    msg=" not checked"
+                }
+                return (
+                    <div>
+                    <input type="checkbox" onChange={this.handleChecked} defaultChecked={this.state.checked}/>
+                    <h2>The checkbox is {msg}</h2>
+                    </div>
+                )
+
             }
         })
         ReactDOM.render(<div className="board">
@@ -61,6 +109,7 @@
             <Comment>"comment1"</Comment>
             <Comment>"comment2"</Comment>
             <Comment>"comment3"</Comment>
+            <CheckBox/>
             </div>
             ,document.getElementById('container')); //render function can return only one component.To return multiple, bind them inside a div or something
     </script>
