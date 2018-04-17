@@ -15,10 +15,29 @@
     <script type="text/babel">
         var X=React.createClass({
             render: function(){
-                return (<h2>Something</h2>);
+                return ( //one component (Bacon) can return one parent element (h1 or div). to return multiple, bind them inside a div or something
+                <div>
+                    <h2>X<br/></h2>
+                    <p> A sample text in variable x <br/></p>
+                </div>
+                )
             }
         })
-        ReactDOM.render(<X/>,document.getElementById('container'));
+        var Y=React.createClass({
+            render: function(){
+                return(
+                    <div>
+                    <h2>Y<br/></h2>
+                    <p> A sample text in variable y <br/> </p>
+                </div>
+                )
+            }
+        })
+        ReactDOM.render(<div>
+            <X/>
+            <Y/>
+            </div>
+            ,document.getElementById('container')); //render function can return only one component.To return multiple, bind them inside a div or something
     </script>
 
 </body>
