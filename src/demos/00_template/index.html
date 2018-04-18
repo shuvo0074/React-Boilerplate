@@ -83,11 +83,7 @@
         var Board = React.createClass({
             getInitialState: function () {
                 return {
-                    comments: [
-                        'a comment',
-                        'another comment',
-                        'last comment'
-                    ],
+                    comments: [],
                     editing: 0
                 }
             },
@@ -161,7 +157,7 @@
             renderEditStoryForm: function () {
                 return(
                     <div className="commentContainer">
-                    <textarea ref="editStoryText" defaultValue=' '></textarea>
+                    <textarea ref="editStoryText" defaultValue={this.props.children}></textarea>
                     <button onClick={this.saveBoard} className="button-success">Save Story</button>
                     </div>
                 )
@@ -180,11 +176,7 @@
         var HomePage = React.createClass({
             getInitialState: function () {
                 return {
-                    stories: [
-                        'a story',
-                        'another story',
-                        'last story'
-                    ],
+                    stories: [],
                     editing: false
                 }
             },
