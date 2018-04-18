@@ -46,11 +46,13 @@
             },
             remove: function() {
                 console.log("removing comment" + (this.props.children))
+                this.props.removeCommentText(this.props.index)
             },
             save: function() {
                 var val=this.refs.newText.value
                 this.setState({editing: false})
-                console.log("editing comment" + val);
+                console.log("saving comment" + val);
+                this.props.updateCommentText(val,this.props.index)
             },
             renderNormal:function () {
                 return(
@@ -71,6 +73,7 @@
             },
             render: function(){
                 if (this.state.editing) {
+                    console.log("editing from comment")
                     return this.renderForm()
                 }else{
                     return this.renderNormal()
@@ -84,30 +87,168 @@
                         'a comment',
                         'another comment',
                         'last comment'
-                    ]
+                    ],
+                    editing: 0
                 }
             },
-            render: function () {
+            editBoard: function () {
+                console.log("editing story")
+                this.setState({editing: 2})
+            },
+            removeBoard: function() {
+                console.log("removing story" + (this.props.children))
+                this.props.removeBoardText(this.props.index)
+            },
+            saveBoard: function() {
+                var val=this.refs.editStoryText.value
+                this.setState({editing: false})
+                console.log("saving story" + val);
+                this.props.updateBoardText(val,this.props.index)
+            },
+            eachComment: function (text , i) {
+                return (
+                    <Comment key={i} index = {i} updateCommentText={this.updateComment} removeCommentText = {this.removeComment} >
+                    {text}
+                    </Comment>)
+            },
+            removeComment: function (i) {
+                console.log("removing comment" + i)
+                var arr=this.state.comments
+                arr.splice(i,1)
+                this.setState({comments: arr})
+            },
+            updateComment: function (updateText,i) {
+                console.log("updating comment" + i +" "+ updateText)
+                var arr=this.state.comments
+                arr[i]= updateText
+                this.setState({comments: arr})
+            },
+            addComment: function (addText) {
+                console.log("adding new comment")
+                this.setState({editing: 1})
+            },
+            saveComment: function () {
+                console.log("saving new comment")
+                var txt=this.refs.addCommentText.value
+                var arr=this.state.comments
+                arr.push(txt)
+                this.setState({comments: arr})
+                this.setState({editing: false})
+            },
+            renderNorm: function () {
                 return(
                     <div className="board">
-                    <X/>
-                    <Y title="comp 1" desc="Random text in Y variable, component 1"/>
-                    <Y title="comp 1" desc="Random text in Y variable, component 2">"another Y"</Y>
-                    <i><Y title="comp 2" desc="Random text in Y variable, component 3"/></i>
-                    <Comment>"comment outside function"</Comment>
+                    <div className="boardText">{this.props.children}</div>
                     <div className="board">
                         {
-                            this.state.comments.map((text , i) => {
-                                return (<Comment key={i}>{text}</Comment>)
-                            })
+                            this.state.comments.map(this.eachComment)
                         }
                     </div>
-                    <CheckBox/>
+                    <button onClick={this.addComment} className="button-primary">add comment</button>
+                    <button onClick={this.editBoard} className="button-success">edit board</button>
+                    <button onClick={this.removeBoard} className="button-danger">remove board</button>    
                     </div>
                 )
+            },
+            renderAddForm: function () {
+                return(
+                    <div className="commentContainer">
+                    <textarea ref="addCommentText" defaultValue=' '></textarea>
+                    <button onClick={this.saveComment} className="button-success">save</button>
+                    </div>
+                )
+            },
+            renderEditStoryForm: function () {
+                return(
+                    <div className="commentContainer">
+                    <textarea ref="editStoryText" defaultValue=' '></textarea>
+                    <button onClick={this.saveBoard} className="button-success">Save Story</button>
+                    </div>
+                )
+            },
+            render: function () {
+                if (this.state.editing==1) {
+                    console.log("editing from board")
+                    return this.renderAddForm()
+                }else if(this.state.editing==0){
+                    return this.renderNorm()
+                }else if(this.state.editing==2){
+                    return this.renderEditStoryForm()
+                }
             }
         })
+        var HomePage = React.createClass({
+            getInitialState: function () {
+                return {
+                    stories: [
+                        'a story',
+                        'another story',
+                        'last story'
+                    ],
+                    editing: false
+                }
+            },
+            eachStory: function (boardText , j) {
+                return (
+                    <Board key={j} index={j} updateBoardText={this.updateStory} removeBoardText = {this.removeStory} >
+                    {boardText}
+                    </Board>)
+            },
+            removeStory: function (j) {
+                console.log("removing story" + j)
+                var arr=this.state.stories
+                arr.splice(j,1)
+                this.setState({stories: arr})
+            },
+            updateStory: function (boardText,j) {
+                console.log("updating story" + j +" "+ boardText)
+                var arr=this.state.stories
+                arr[j]= boardText
+                this.setState({stories: arr})
+            },
+            addStory: function (addBoardText) {
+                console.log("add new story");
+                this.setState({editing: true})
+            },
+            saveStory: function () {
+                console.log("saving new story")
+                var txt=this.refs.addNewBoardText.value
+                var arr=this.state.stories
+                arr.push(txt)
+                this.setState({stories: arr})
+                this.setState({editing: false})
+            },
+            renderStoryNorm: function () {
+                return(
+                    <div className="board">
+                    <div className="board">
+                        {
+                            this.state.stories.map(this.eachStory)
+                        }
+                    </div>
+                    <br/>
+                    <button onClick={this.addStory} className="button-primary">Add Story</button>
+                    </div>
+                )
+            },
+            renderAddStoryForm: function () {
+                return(
+                    <div className="commentContainer">
+                    <textarea ref="addNewBoardText" defaultValue=' '></textarea>
+                    <button onClick={this.saveStory} className="button-success">Save new Story</button>
+                    </div>
+                )
+            },
+            render: function () {
+                if (this.state.editing) {
+                    console.log("editing from HomePage")
+                    return this.renderAddStoryForm()
+                }else{
+                    return this.renderStoryNorm()
+                }
+            }
 
+        })
         var CheckBox=React.createClass({
             getInitialState: function () {
                 return {checked: false} //multiple states can be defined here
@@ -133,7 +274,15 @@
             }
         })
         ReactDOM.render(
-            <Board />,document.getElementById('container')); //render function can return only one component.To return multiple, bind them inside a div or something
+            <div>
+                <X/>
+                <Y title="comp 1" desc="Random text in Y variable, component 1"/>
+                <Y title="comp 1" desc="Random text in Y variable, component 2">"another Y"</Y>
+                <CheckBox/>
+                <i><Y title="comp 2" desc="Random text in Y variable, component 3"/></i>
+                <Comment>"comment outside function"</Comment>
+                <HomePage />
+            </div>,document.getElementById('container')); //render function can return only one component.To return multiple, bind them inside a div or something
     </script>
 
 </body>
