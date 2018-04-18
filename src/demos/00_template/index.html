@@ -77,6 +77,37 @@
                 }
             }
         })
+        var Board = React.createClass({
+            getInitialState: function () {
+                return {
+                    comments: [
+                        'a comment',
+                        'another comment',
+                        'last comment'
+                    ]
+                }
+            },
+            render: function () {
+                return(
+                    <div className="board">
+                    <X/>
+                    <Y title="comp 1" desc="Random text in Y variable, component 1"/>
+                    <Y title="comp 1" desc="Random text in Y variable, component 2">"another Y"</Y>
+                    <i><Y title="comp 2" desc="Random text in Y variable, component 3"/></i>
+                    <Comment>"comment outside function"</Comment>
+                    <div className="board">
+                        {
+                            this.state.comments.map((text , i) => {
+                                return (<Comment key={i}>{text}</Comment>)
+                            })
+                        }
+                    </div>
+                    <CheckBox/>
+                    </div>
+                )
+            }
+        })
+
         var CheckBox=React.createClass({
             getInitialState: function () {
                 return {checked: false} //multiple states can be defined here
@@ -101,17 +132,8 @@
 
             }
         })
-        ReactDOM.render(<div className="board">
-            <X/>
-            <Y title="comp 1" desc="Random text in Y variable, component 1"/>
-            <Y>"another Y"</Y>
-            <i><Y title="comp 2" desc="Random text in Y variable, component 2"/></i>
-            <Comment>"comment1"</Comment>
-            <Comment>"comment2"</Comment>
-            <Comment>"comment3"</Comment>
-            <CheckBox/>
-            </div>
-            ,document.getElementById('container')); //render function can return only one component.To return multiple, bind them inside a div or something
+        ReactDOM.render(
+            <Board />,document.getElementById('container')); //render function can return only one component.To return multiple, bind them inside a div or something
     </script>
 
 </body>
